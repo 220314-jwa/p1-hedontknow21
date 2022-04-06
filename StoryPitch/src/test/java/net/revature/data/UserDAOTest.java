@@ -7,20 +7,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-
-
-
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import net.revature.models.User;
 import net.revature.data.UserDAO;
+import net.revature.data.DAOFactory;
 
 
 @TestMethodOrder(OrderAnnotation.class)
 public class UserDAOTest {
-	private static UserDAO userDao; // TODO instantiate
+	private static UserDAO userDao = DAOFactory.getUserDAO();
 	private static User testUser = new User();
 	private static User testNewUser = new User();
 	

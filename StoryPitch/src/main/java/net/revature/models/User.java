@@ -10,7 +10,7 @@ public class User {
 	private String passWord;
 	private String firstName;
 	private String lastName;
-	private String roleName;
+	private Role role;
 	private List<Pitch> pitches;
 	
 	public User() {
@@ -19,7 +19,7 @@ public class User {
 		passWord = "";
 		firstName = "";
 		lastName = "";
-		roleName = "";
+		role = new Role();
 		pitches = new ArrayList<>();
 	}
 
@@ -63,12 +63,12 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public String getRoleName() {
-		return roleName;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
+	public void  setRole(Role role) {
+		this.role = role;
 	}
 
 	public List<Pitch> getPitches() {
@@ -83,7 +83,7 @@ public class User {
 	// overriding the toString method
 		public String toString() {
 			return "Pitch [id=" + id +", username=" + userName + ", password=" + passWord + ", firstname="
-					+ firstName + ", lastname=" + lastName + ", rolename=" + roleName + ", pitches=" + pitches +"]";
+					+ firstName + ", lastname=" + lastName + ", role=" + role + ", pitches=" + pitches +"]";
 		}
 		@Override
 		public int hashCode() {
@@ -95,7 +95,7 @@ public class User {
 			result = prime * result + id;
 			result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 			result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-			result = prime * result + ((roleName == null) ? 0 : roleName.hashCode());
+			result = prime * result + ((role == null) ? 0 : role.hashCode());
 			result = prime * result + ((pitches == null) ? 0 : pitches.hashCode());
 			return result;
 		}
@@ -127,10 +127,10 @@ public class User {
 					return false;
 			} else if (!passWord.equals(other.passWord))
 				return false;
-			if (roleName == null) {
-				if (other.roleName != null)
+			if (role == null) {
+				if (other.role != null)
 					return false;
-			} else if (!roleName.equals(roleName))
+			} else if (!role.equals(role))
 				return false;
 			if (userName == null) {
 				if (other.userName != null)

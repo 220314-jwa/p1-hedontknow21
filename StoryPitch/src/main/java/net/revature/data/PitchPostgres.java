@@ -31,29 +31,29 @@ public int create(Pitch newObj) throws SQLException {
 		Connection	connection = connFactory.getConnection();
 		
 		// this stores our sql command, that we would normally write in DBeaver/command line
-		String sql = "insert into storypitch (id, tentative_title, exp_completion_date, length_type, one_sentence_blurb, description, status_id, role_id, genre_id)" +
+		String sql = "insert into story_pitch (id, tentative_title, exp_completion_date, length_type, one_sentence_blurb, description, status_id, role_id, genre_id)" +
 		"values(default, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try {
 		// create a prepared statement
 		PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 		// set the fields
-		preparedStatement.setString(2, newObj.getTenativeTitle());
-		preparedStatement.setString(6, newObj.getDescription());
-		preparedStatement.setString(4, newObj.getLengthType());
-		preparedStatement.setString(5, newObj.getOneSentenceBlurb());
-		preparedStatement.setDate(3, newObj.getExpCompletionDate());
+		preparedStatement.setString(1, newObj.getTenativeTitle());
+		preparedStatement.setString(5, newObj.getDescription());
+		preparedStatement.setString(3, newObj.getLengthType());
+		preparedStatement.setString(4, newObj.getOneSentenceBlurb());
+		preparedStatement.setDate(2, newObj.getExpCompletionDate());
 		// instantiating the genre dao into the pitch
 		GenreDAO genreDAO = DAOFactory.getGenreDAO();
 		// passing in the genre dao string and returning as an id
-		preparedStatement.setInt(8, genreDAO.getByGenreName(newObj.getGenre()));
+		preparedStatement.setInt(7, genreDAO.getByGenreName(newObj.getGenre()));
 		// instainting the role name dao into the pitch
 		RoleDAO roleNameDAO = DAOFactory.getRoleDAO();
 		// passing in the role name dao to return as an id
-		preparedStatement.setInt(9, roleNameDAO.getByRoleName(newObj.getRole()));
+		preparedStatement.setInt(8, roleNameDAO.getByRoleName(newObj.getRole()));
 		// instantiating the status dao in the pitch
 		StatusDAO statusDAO = DAOFactory.getStatusDAO();
 		//passing in the status by id
-		preparedStatement.setInt(7, statusDAO.getByStatusName(newObj.getStatus()));
+		preparedStatement.setInt(6, statusDAO.getByStatusName(newObj.getStatus()));
 		
 		
 		// execute this command, return number of rows affected
@@ -96,38 +96,210 @@ public int create(Pitch newObj) throws SQLException {
 }
 
 public Pitch getById(int id) {
-	// TODO Auto-generated method stub
-	return null;
+	// initialize our pitch object to be null:
+			Pitch storyPitch = null;
+			//placeholder for our final sql string
+			// ? placeholder for our id:
+			// * means all fields
+			// but we specify an id so we only get one single pitch:
+			String sql = "SELECT *  FROM story_pitch WHERE id = ?";
+			try (Connection connection = connFactory.getConnection()){
+				PreparedStatement prepStatement = connection.prepareStatement(sql);
+				prepStatement.setInt(1, id);
+				ResultSet resultSet = prepStatement.executeQuery();
+				// if result set does'nt point to a next value something went wrong
+				if(resultSet.next()) {
+					storyPitch = parseResultSet(resultSet);
+				}else {
+					System.out.println("Something went wrong when querying the pitch");
+				}
+					}catch(SQLException e){
+						e.printStackTrace();
+					}
+			return storyPitch;
+				
 }
+
+
+
 
 public List<Pitch> getAll() {
-	// TODO Auto-generated method stub
-	return null;
+	List<Pitch> pitches = new ArrayList<Pitch>();
+	
+	String sql = "SELECT * from story_pitch";
+	
+	try(Connection connection = connFactory.getConnection()){
+		PreparedStatement prepStatement = connection.prepareStatement(sql);
+		ResultSet resultSet = prepStatement.executeQuery();
+		
+		while(resultSet.next()) {
+			Pitch pitch = parseResultSet(resultSet);
+			pitches.add(pitch);
+		}
+	}catch(SQLException e) {
+		e.printStackTrace();
+	}
+	
+	return pitches;
 }
+	private Pitch parseResultSet(ResultSet resultSet) throws SQLException {
+		Pitch pitch = new Pitch();
+		
+		pitch.setId(resultSet.getInt(1));
+		pitch.setTenativeTitle(resultSet.getString(2));
+		pitch.setExpCompletionDate(resultSet.getDate(3));
+		pitch.setLengthType(resultSet.getString(4));
+		pitch.setOneSentenceBlurb(resultSet.getString(5));
+		pitch.setDescription(resultSet.getString(6));
+		// instantiate the neccassary DAOS to get an id from a string
+		StatusDAO statusDAO = DAOFactory.getStatusDAO();
+		RoleDAO roleNameDAO = DAOFactory.getRoleDAO();
+		GenreDAO genreDAO = DAOFactory.getGenreDAO();
+		// Now use the DAOS to parse the string into ints
+		pitch.setStatus(statusDAO.getByStatusId(resultSet.getInt(7)) );
+		pitch.setRole(roleNameDAO.getByRoleId(resultSet.getInt(8)));
+		pitch.setGenre(genreDAO.getByGenreId(resultSet.getInt(9)));
+		
+		return pitch;
+	}
+
 
 public void update(Pitch updatedObj) {
-	// TODO Auto-generated method stub
+	Connection connection = connFactory.getConnection();
+	// we create the template for the SQL string:
+	String sql = "update story_pitch set tentative_title = ?, exp_completion_date = ?, length_type = ?, one_sentence_blurb = ?"
+			+ "description = ?,status_id = ?, role_id = ?,genre_id = ? where id = ?;";
+	try {
+    	PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    	// fill in the template:
+    	preparedStatement.setString(1,updatedObj.getTenativeTitle());
+    	preparedStatement.setDate(2,updatedObj.getExpCompletionDate());
+    	preparedStatement.setString(3, updatedObj.getLengthType());
+    	preparedStatement.setString(4,  updatedObj.getOneSentenceBlurb());
+    	preparedStatement.setString(5, updatedObj.getDescription());        	
+    	preparedStatement.setString(6, updatedObj.getStatus());
+    	preparedStatement.setString(7, updatedObj.getRole());
+    	preparedStatement.setString(8, updatedObj.getGenre());
+    	preparedStatement.setInt(9, updatedObj.getId());
+    	
+    	connection.setAutoCommit(false);
+    	// return a count of how many records were updated
+    	int count = preparedStatement.executeUpdate();
+    	if(count != 1) {
+    		System.out.println("Oops! Something went wrong with the update!");
+    		connection.rollback();
+    	} else connection.commit();
+    	
+		
+	} catch(SQLException e) {
+		e.printStackTrace();
+		try {
+			connection.rollback();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	} finally {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 	
 }
 
 public void delete(Pitch objToDelete) {
-	// TODO Auto-generated method stub
+	Connection connection = connFactory.getConnection();
+	
+	String sql = "delete from story_pitch where id = ?;";
+	try {
+		PreparedStatement preparedStatement = connection.prepareStatement(sql);
+		preparedStatement.setInt(1, objToDelete.getId());
+		
+		connection.setAutoCommit(false);
+		int count = preparedStatement.executeUpdate();
+		if (count != 1) {
+			System.out.println("Something went wrong with the deletion!");
+			connection.rollback();
+		} else connection.commit();
+	} catch (SQLException e) {
+		e.printStackTrace();
+		try {
+			connection.rollback();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	} finally {
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }
 
 public List<Pitch> getByRole(User role) {
-	// TODO Auto-generated method stub
-	return null;
+	List<Pitch> pitches = new LinkedList<>();
+	try (Connection conn = connFactory.getConnection()) {
+		String sql = "select * from story_pitch where role_id=?";
+		PreparedStatement prepStatement = conn.prepareStatement(sql);
+		
+		prepStatement.setString(8, role.toString());
+		
+		ResultSet resultSet = prepStatement.executeQuery();
+		while (resultSet.next()) {
+			Pitch pitch = parseResultSet(resultSet);
+			pitches.add(pitch);
+		}
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	
+    return pitches;
 }
 
 public List<Pitch> getByStatus(String status) {
-	// TODO Auto-generated method stub
-	return null;
+	List<Pitch> pitches = new LinkedList<>();
+	try (Connection conn = connFactory.getConnection()) {
+		String sql = "select * from story_pitch where status_id=?";
+		PreparedStatement prepStatement = conn.prepareStatement(sql);
+		
+		prepStatement.setString(7, status);
+		
+		ResultSet resultSet = prepStatement.executeQuery();
+		while (resultSet.next()) {
+			Pitch pitch = parseResultSet(resultSet);
+			pitches.add(pitch);
+		}
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	
+    return pitches;
 }
 
 @Override
 public List<Pitch> getByPitch(User user) {
+	List<Pitch> pitches = new LinkedList<>();
+	try (Connection conn = connFactory.getConnection()) {
+		String sql = "select * from users join user_pitches on users.id=user_pitches.users_id"
+				+ " where user_pitches.users_id=?";
+		PreparedStatement pStmt = conn.prepareStatement(sql);
+		pStmt.setInt(1, user.getId());
+		
+		ResultSet resultSet = pStmt.executeQuery();
+		while (resultSet.next()) {
+			Pitch pitch = parseResultSet(resultSet);
+			pitches.add(pitch);
+		}
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
 	
-	return null;
+    return pitches;
 }
 }
+

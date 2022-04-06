@@ -36,10 +36,11 @@ public class StoryPitchApp {
 			// we get this date from the body of the http request
 			Pitch pitch = ctx.bodyAsClass(Pitch.class);
 			// get out pitch dao from the factory
-			PitchDAO storyToPitchDAO = DAOFactory.getPitchDAO();
+			PitchDAO pitchDAO = DAOFactory.getPitchDAO();
 			// try to insert pitch obj into database
-			int id = storyToPitchDAO.create(pitch);
-			ctx.result("Generated id id: " + id);
+			int id = pitchDAO.create(pitch);
+			ctx.result("Generated id :" + id);
+			System.out.println(id);
 		});
 		// get pitch by id
 		app.get("/pitches/{id}", ctx -> {
@@ -90,6 +91,7 @@ public class StoryPitchApp {
 			} catch (net.revature.exceptions.IncorrectCredentialsException e) {
 				ctx.status(HttpCode.UNAUTHORIZED); // 401 unauthorized - must be logged in
 			}
+			
 		});
 
 		// PUT to /pitches/{id}/status where {id} will be a number (a pitch ID): submit
@@ -100,14 +102,14 @@ public class StoryPitchApp {
 			// so we use ctx.pathParam and use the name we specified in
 			// the path above
 			int pitchId = Integer.parseInt(ctx.pathParam("id"));
-			Pitch storyToSumbit = userServ.getPitchtById(pitchId);
+			Pitch pitchSumbit = userServ.getPitchtById(pitchId);
 
 			// now we need to get the User from the request body
 			User user = ctx.bodyAsClass(User.class);
 
 			try {
 				// now we have everything we need to submit a pitch
-				user = userServ.submittedPitch(user, storyToSumbit);
+				user = userServ.submittedPitch(user, pitchSumbit);
 
 				// then we can return the updated user
 				ctx.json(user);

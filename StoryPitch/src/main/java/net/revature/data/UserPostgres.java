@@ -12,6 +12,7 @@ import net.revature.models.User;
 
 import net.revature.utils.ConnectionFactory;
 import net.revature.data.DAOFactory;
+import net.revature.data.RoleDAO;
 
 public class UserPostgres implements UserDAO {
 	// get the connection to database
@@ -22,12 +23,13 @@ public class UserPostgres implements UserDAO {
 
 		Connection conn = connFactory.getConnection();
 		try {
-			String sql = "insert into users ( user_name, password, first_name, last_name)" + " values (?,?,?,?,)";
+			String sql = "insert into users ( user_name, password, first_name, last_name, role_id)" + " values (?,?,?,?,?)";
 			PreparedStatement prepStatement = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			prepStatement.setString(3, newObj.getFirstName());
 			prepStatement.setString(4, newObj.getLastName());
 			prepStatement.setString(1, newObj.getUserName());
 			prepStatement.setString(2, newObj.getPassWord());
+			prepStatement.setInt(5, 1);
 
 			conn.setAutoCommit(false); // for ACID (transaction management)
 			prepStatement.executeUpdate();
@@ -123,12 +125,15 @@ public class UserPostgres implements UserDAO {
 	public void update(User updatedObj) {
 		Connection conn = connFactory.getConnection();
 		try {
-			String sql = "update person set  username=?, password=?, first_name=?, last_name=?" + "where id=?";
+			String sql = "update users set  username=?, password=?, first_name=?, last_name=?, role_id=?" 
+					+ "where id=?";
 			PreparedStatement prepStatement = conn.prepareStatement(sql);
 			prepStatement.setString(3, updatedObj.getFirstName());
 			prepStatement.setString(4, updatedObj.getLastName());
 			prepStatement.setString(1, updatedObj.getUserName());
 			prepStatement.setString(2, updatedObj.getPassWord());
+			prepStatement.setInt(5, updatedObj.getRole().getId());
+			prepStatement.setInt(6, updatedObj.getId());
 
 			conn.setAutoCommit(false); // for ACID (transaction management)
 			int rowsUpdated = prepStatement.executeUpdate();
