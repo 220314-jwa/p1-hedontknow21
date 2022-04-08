@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-----This a different way of selecting a child element with a parent then a space then the target element-->
+        <style>
+            div p {
+                background-color: red;
+                font-family: 'Times New Roman';
+            }
+
+        </style>
+    </head>
+    <body>
+        <!--- This means that every paragraph in a div will have a red background with times new roman font-->
+        <div>
+            <p>I'll match</p>
+            <section><p>I'll match</p></section>
+        </div>
+        <p>Im not in a div.</p>
+    </body>
+</html>
