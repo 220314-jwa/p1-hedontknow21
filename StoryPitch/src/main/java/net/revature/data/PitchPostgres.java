@@ -31,29 +31,32 @@ public int create(Pitch newObj) throws SQLException {
 		Connection	connection = connFactory.getConnection();
 		
 		// this stores our sql command, that we would normally write in DBeaver/command line
-		String sql = "insert into story_pitch (id, tentative_title, exp_completion_date, length_type, one_sentence_blurb, description, status_id, role_id, genre_id)" +
-		"values(default, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into story_pitch (id, users_id, tentative_title, exp_completion_date, length_type, one_sentence_blurb, description, status_id, role_id, genre_id)" +
+		"values(default,?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try {
 		// create a prepared statement
 		PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 		// set the fields
-		preparedStatement.setString(1, newObj.getTenativeTitle());
-		preparedStatement.setString(5, newObj.getDescription());
-		preparedStatement.setString(3, newObj.getLengthType());
-		preparedStatement.setString(4, newObj.getOneSentenceBlurb());
-		preparedStatement.setDate(2, newObj.getExpCompletionDate());
+		preparedStatement.setString(2, newObj.getTenativeTitle());
+		preparedStatement.setString(6, newObj.getDescription());
+		preparedStatement.setString(4, newObj.getLengthType());
+		preparedStatement.setString(5, newObj.getOneSentenceBlurb());
+		preparedStatement.setDate(3, newObj.getExpCompletionDate());
 		// instantiating the genre dao into the pitch
 		GenreDAO genreDAO = DAOFactory.getGenreDAO();
 		// passing in the genre dao string and returning as an id
-		preparedStatement.setInt(7, genreDAO.getByGenreName(newObj.getGenre()));
+		preparedStatement.setInt(8, genreDAO.getByGenreName(newObj.getGenre()));
 		// instainting the role name dao into the pitch
 		RoleDAO roleNameDAO = DAOFactory.getRoleDAO();
 		// passing in the role name dao to return as an id
-		preparedStatement.setInt(8, roleNameDAO.getByRoleName(newObj.getRole()));
+		preparedStatement.setInt(9, roleNameDAO.getByRoleName(newObj.getRole()));
 		// instantiating the status dao in the pitch
 		StatusDAO statusDAO = DAOFactory.getStatusDAO();
 		//passing in the status by id
-		preparedStatement.setInt(6, statusDAO.getByStatusName(newObj.getStatus()));
+		preparedStatement.setInt(7, statusDAO.getByStatusName(newObj.getStatus()));
+		//instantiating the user into the pitch
+		// passing in the users id
+		preparedStatement.setInt(1, newObj.getUsersId());
 		
 		
 		// execute this command, return number of rows affected

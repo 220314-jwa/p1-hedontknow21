@@ -8,4 +8,5 @@ public interface UserDAO extends GenericDAO<User>{
 		//i've set it to User so a class that implements this interface will
 		//have the types as User
 		public User getByUsername(String username);
+		public User getById(int usersId);
 }

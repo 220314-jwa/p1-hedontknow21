@@ -15,12 +15,13 @@ public class Pitch {
 	private String status;
 	private String role;
 	private String genre;
-	
+	private int  usersId;
 	
 	
 	
 	public Pitch() {
 		id = 0;
+		usersId = getUsersId();
 		tenativeTitle = "";
 		expCompletionDate = getExpCompletionDate();
 		lengthType = "";
@@ -87,6 +88,17 @@ public class Pitch {
 	public void setGenre(String genre) {
 		this.genre = genre;
 	}
+	
+
+	public int getUsersId() {
+		return usersId;
+	}
+
+
+	public void setUsersId(int usersId) {
+		this.usersId = usersId;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -97,6 +109,7 @@ public class Pitch {
 		result = prime * result + ((tenativeTitle == null) ? 0 : tenativeTitle.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + id ;
+		result = prime * result + usersId ;
 		result = prime * result + ((lengthType == null) ? 0 : lengthType.hashCode());
 		result = prime * result + ((oneSentenceBlurb == null) ? 0 : oneSentenceBlurb.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
@@ -157,13 +170,14 @@ public class Pitch {
 				return false;
 		} else if (!genre.equals(other.genre))
 			return false;
+		
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		// Overriding the toString
-		return "StoryPitch [id=" + id +", tenativeTitle=" + tenativeTitle + ", expCompletionDate=" + expCompletionDate + ", legnthType="
+		return "Pitch [id=" + id +", usersId=" +usersId + ", tenativeTitle=" + tenativeTitle + ", expCompletionDate=" + expCompletionDate + ", legnthType="
 		+ lengthType + ", oneSentenceBlurb=" + oneSentenceBlurb + ", description=" + description +  ", role=" + role + ", genre=" + genre +"]";
 
 

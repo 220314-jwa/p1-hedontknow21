@@ -20,7 +20,7 @@ import net.revature.models.Pitch;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class PitchDAOTest {
-	
+	private static UserDAO userDAO = DAOFactory.getUserDAO();
 	private static PitchDAO pitchDAO = DAOFactory.getPitchDAO();
 	private static Pitch testPitch = new Pitch();
 	private static Pitch testNewPitch = new Pitch();
@@ -123,6 +123,7 @@ public class PitchDAOTest {
 			
 			@Test
 			public void deleteUserDoesNotExist() {
+				
 				assertThrows(SQLException.class, () -> {
 					pitchDAO.delete(new Pitch());
 				});

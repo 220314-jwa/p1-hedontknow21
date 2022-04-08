@@ -2,6 +2,8 @@ package net.revature.app;
 
 import java.time.LocalDate;
 
+import net.revature.models.User;
+
 
 public class StoryPitch {
 	// Creating a object for the story pitch
@@ -11,11 +13,13 @@ public class StoryPitch {
 		String lengthType;
 		String oneSentenceBlurb;
 		String description;
-
+		User usersId;
+		
+		
 		@Override
 		// overriding the toString method
 		public String toString() {
-			return "StoryPitch [id=" + id +", tenativeTitle=" + tenativeTitle + ", expCompletionDate=" + expCompletionDate + ", legnthType="
+			return "StoryPitch [id=" + id + ", usersId=" + usersId + ", tenativeTitle=" + tenativeTitle + ", expCompletionDate=" + expCompletionDate + ", legnthType="
 					+ lengthType + ", oneSentenceBlurb=" + oneSentenceBlurb + ", description=" + description + "]";
 
 		}
@@ -25,6 +29,7 @@ public class StoryPitch {
 			final int prime = 31;
 			int result = 1;
 			//result = prime * result + age;
+			
 			result = prime * result + ((description == null) ? 0 : description.hashCode());
 			result = prime * result + ((tenativeTitle == null) ? 0 : tenativeTitle.hashCode());
 			result = prime * result + id;
