@@ -148,20 +148,20 @@ public List<Pitch> getAll() {
 	private Pitch parseResultSet(ResultSet resultSet) throws SQLException {
 		Pitch pitch = new Pitch();
 		
-		pitch.setId(resultSet.getInt(1));
-		pitch.setTenativeTitle(resultSet.getString(2));
-		pitch.setExpCompletionDate(resultSet.getDate(3));
-		pitch.setLengthType(resultSet.getString(4));
-		pitch.setOneSentenceBlurb(resultSet.getString(5));
-		pitch.setDescription(resultSet.getString(6));
+		pitch.setId(resultSet.getInt("id"));
+		pitch.setTenativeTitle(resultSet.getString("tentative_title"));
+		pitch.setExpCompletionDate(resultSet.getDate("exp_completion_date"));
+		pitch.setLengthType(resultSet.getString("length_type"));
+		pitch.setOneSentenceBlurb(resultSet.getString("one_sentence_blurb"));
+		pitch.setDescription(resultSet.getString("description"));
 		// instantiate the neccassary DAOS to get an id from a string
 		StatusDAO statusDAO = DAOFactory.getStatusDAO();
 		RoleDAO roleNameDAO = DAOFactory.getRoleDAO();
 		GenreDAO genreDAO = DAOFactory.getGenreDAO();
 		// Now use the DAOS to parse the string into ints
-		pitch.setStatus(statusDAO.getByStatusId(resultSet.getInt(7)) );
-		pitch.setRole(roleNameDAO.getByRoleId(resultSet.getInt(8)));
-		pitch.setGenre(genreDAO.getByGenreId(resultSet.getInt(9)));
+		pitch.setStatus(statusDAO.getByStatusId(resultSet.getInt("status_id")) );
+		pitch.setRole(roleNameDAO.getByRoleId(resultSet.getInt("role_id")));
+		pitch.setGenre(genreDAO.getByGenreId(resultSet.getInt("genre_id")));
 		
 		return pitch;
 	}

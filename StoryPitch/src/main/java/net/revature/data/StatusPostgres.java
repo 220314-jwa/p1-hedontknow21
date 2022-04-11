@@ -46,14 +46,14 @@ public class StatusPostgres implements StatusDAO{
 	public String getByStatusId(int status_id) {
 		Status status = null;
 		try (Connection conn = connFactory.getConnection()) {
-			String sql = "select * from user_role where user_role.role_name = ?";
+			String sql = "select * from status where status.id = ?";
 			PreparedStatement prepStatement = conn.prepareStatement(sql);
 			prepStatement.setInt(1, status_id);
 
 			ResultSet resultSet = prepStatement.executeQuery();
 			if (resultSet.next()) {
-				resultSet.getString("status_name");
-				return resultSet.getString("status_name");
+				resultSet.getString("id");
+				return resultSet.getString("id");
 			}
 
 		} catch (SQLException e) {

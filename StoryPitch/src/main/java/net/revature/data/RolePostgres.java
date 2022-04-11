@@ -44,14 +44,14 @@ public class RolePostgres implements RoleDAO{
 	public String getByRoleId(int role_id) {
 		Role role = null;
 		try (Connection conn = connFactory.getConnection()) {
-			String sql = "select * from user_role where user_role.role_name = ?";
+			String sql = "select * from user_role where user_role.id = ?";
 			PreparedStatement prepStatement = conn.prepareStatement(sql);
 			prepStatement.setInt(1, role_id);
 
 			ResultSet resultSet = prepStatement.executeQuery();
 			if (resultSet.next()) {
-				resultSet.getString("role_name");
-				return resultSet.getString("role_name");
+				resultSet.getString("id");
+				return resultSet.getString("id");
 			}
 
 		} catch (SQLException e) {

@@ -37,10 +37,12 @@ public class UserDAOTest {
 	}
 	
 	@AfterAll
-	public static void cleanUp() {
-		// TODO remove users in DB with username containing "test"
+	public static void cleanUp() throws SQLException {
 		userDao.delete(testUser);
 	}
+		
+	
+	
 	
 	@Test
 	public void getByUsernameExists() {

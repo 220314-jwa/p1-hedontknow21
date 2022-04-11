@@ -1,6 +1,6 @@
 package net.revature.services;
 
-import java.sql.SQLException;
+
 import java.util.List;
 
 import net.revature.exceptions.UserNameAlreadyExistsException;
@@ -8,6 +8,19 @@ import net.revature.exceptions.AlreadySubmittedException;
 import net.revature.exceptions.IncorrectCredentialsException;
 import net.revature.models.Pitch;
 import net.revature.models.User;
+
+
+/*- here we can lay out all of the behaviors that we want
+ * users to be able to do. services are just about the
+ * services, or tasks, that we want to provide to users,
+ * and the Java that makes those methods work.
+ * 
+ * it also allows for a separation between database code (DAOs),
+ * HTTP handling code (Javalin), and the "business logic" or actual
+ * functionality that users are doing (services). this idea is called
+ * "separation of concerns" and allows you to have cleaner, more
+ * organized, and more maintainable code.
+ */
 
 
 public interface UserService {
@@ -29,9 +42,9 @@ public interface UserService {
 	 * 
 	 * @param newUser
 	 * @return User with newly generated ID
-	 * @throws SQLException 
+	 *  
 	 */
-	public User register(User newUser) throws UserNameAlreadyExistsException, SQLException;
+	public User register(User newUser) throws UserNameAlreadyExistsException;
 	/**
 	 * 
 	 * @param user
@@ -40,7 +53,7 @@ public interface UserService {
 	 * @throws AlreadySubmittedException
 	 */
 
-	public User submittedPitch(User user, Pitch storyToPitch) throws AlreadySubmittedException;
+	public User submittedPitch(User user, Pitch storyToPitch) throws AlreadySubmittedException, Exception;
 
 	/**
 	 * 
@@ -62,5 +75,6 @@ public interface UserService {
 	 * 
 	 * @return the list pitches depending on their status name
 	 */
+	public User getUserById(int id);
 
 }

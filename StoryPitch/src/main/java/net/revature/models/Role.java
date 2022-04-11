@@ -9,7 +9,7 @@ public class Role {
 	private String roleName;
 	//method
 	public Role() {
-		id = 0;
+		id = 1;
 		
 		roleName = "";
 	}

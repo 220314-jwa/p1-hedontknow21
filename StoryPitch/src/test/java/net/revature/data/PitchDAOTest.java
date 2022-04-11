@@ -17,6 +17,7 @@ import net.revature.data.DAOFactory;
 import net.revature.data.PitchDAO;
 import net.revature.data.UserDAO;
 import net.revature.models.Pitch;
+import net.revature.models.User;
 
 @TestMethodOrder(OrderAnnotation.class)
 public class PitchDAOTest {
@@ -24,9 +25,10 @@ public class PitchDAOTest {
 	private static PitchDAO pitchDAO = DAOFactory.getPitchDAO();
 	private static Pitch testPitch = new Pitch();
 	private static Pitch testNewPitch = new Pitch();
+	private static User testUser = new User();
 	
 	@BeforeAll
-	public static void setUP() throws SQLException {
+	public static void setUP() throws Exception {
 		// this is the base test pitch used for most tests
 				testPitch.setTenativeTitle("test");
 				
@@ -40,20 +42,30 @@ public class PitchDAOTest {
 			}
 			
 			@AfterAll
-			public static void cleanUp() {
+			public static void cleanUp() throws SQLException {
 				// TODO remove pitches in DB with name containing "test"
 				pitchDAO.delete(testPitch);
 			}
 			
 			@Test
 			public void getByUserExists() {
-				// 
+				userDAO.getAll().contains(testUser);
 				
 			}
 			
 			@Test
 			public void getByUserDoesNotExist() {
-				// TODO
+				List<User> users = userDAO.getAll();
+				
+				boolean doesUserExist = true;
+				for(User user : users) {
+					String userExist = user.getUserName().toLowerCase();
+					if(!users.contains(userExist)) {
+						doesUserExist = false;
+						break;
+					}
+				}
+						
 			}
 			
 			@Test

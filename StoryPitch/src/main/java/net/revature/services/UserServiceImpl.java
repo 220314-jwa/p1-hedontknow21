@@ -10,12 +10,13 @@ import net.revature.exceptions.IncorrectCredentialsException;
 import net.revature.exceptions.UserNameAlreadyExistsException;
 import net.revature.models.Pitch;
 import net.revature.models.User;
+import net.revature.data.DAOFactory;
 import net.revature.data.PitchDAO;
 import net.revature.data.UserDAO;
 
 public class UserServiceImpl implements UserService{
-	private UserDAO userDao;
-	private PitchDAO pitchDao;
+	private UserDAO userDao = DAOFactory.getUserDAO();
+	private PitchDAO pitchDao = DAOFactory.getPitchDAO();
 	
 	
 	@Override
@@ -30,13 +31,22 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User register(User newUser) throws UserNameAlreadyExistsException, SQLException {
-		int id = userDao.create(newUser);
-		if(id != 0) {
+	public User register(User newUser) throws UserNameAlreadyExistsException {
+		int id = 0;
+		try {
+			id = userDao.create(newUser);
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}if(id != 0) {
 			newUser.setId(id);
 			return newUser;
+		}else {
+			throw new UserNameAlreadyExistsException();
 		}
-		return null;
+		
+		
 	}
 
 	@Override
@@ -76,7 +86,7 @@ public class UserServiceImpl implements UserService{
 				// if you're interested :)
 				List<Pitch> pitches = pitchDao.getAll();
 				pitches = pitches.stream()
-						.filter((pitch) -> pitch.getStatus().equals("Submitted"))
+						.filter((pitch) -> pitch.getStatus().equals("2"))
 						.collect(Collectors.toList());
 				return pitches;
 	}
@@ -104,4 +114,10 @@ public class UserServiceImpl implements UserService{
 //		return pitchesWithStatus;
 //	}
 
-}}
+}
+
+	@Override
+	public User getUserById(int id) {
+		
+		return userDao.getById(id);
+	}}

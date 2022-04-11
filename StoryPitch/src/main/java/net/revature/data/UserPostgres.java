@@ -25,15 +25,15 @@ public class UserPostgres implements UserDAO {
 
 		Connection conn = connFactory.getConnection();
 		try {
-			String sql = "insert into users (id, user_name, password, first_name, last_name, role)" + " values (?,?,?,?,?)";
+			String sql = "insert into users ( user_name, pass_word, first_name, last_name, role_id)" + " values (?,?,?,?,?)";
 			PreparedStatement prepStatement = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
 			//Passing in the sql statement of the  users table in order of column entries
-			prepStatement.setInt(1, newObj.getId());
-			prepStatement.setString(4, newObj.getFirstName());
-			prepStatement.setString(5, newObj.getLastName());
-			prepStatement.setString(2, newObj.getUserName());
-			prepStatement.setString(3, newObj.getPassWord());
-			prepStatement.setString(6, newObj.getRole().getRoleName());
+			
+			prepStatement.setString(3, newObj.getFirstName());
+			prepStatement.setString(4, newObj.getLastName());
+			prepStatement.setString(1, newObj.getUserName());
+			prepStatement.setString(2, newObj.getPassWord());
+			prepStatement.setInt(5, newObj.getRole().getId());
 
 			conn.setAutoCommit(false); // for ACID (transaction management)
 			prepStatement.executeUpdate();
@@ -80,7 +80,7 @@ public class UserPostgres implements UserDAO {
 				user.setFirstName(resultSet.getString("first_name"));
 				user.setLastName(resultSet.getString("last_name"));
 				user.setUserName(resultSet.getString("user_name"));
-				user.setPassWord(resultSet.getString("password"));
+				user.setPassWord(resultSet.getString("pass_word"));
 				
 
 				PitchDAO pitchDAO = DAOFactory.getPitchDAO();
@@ -113,7 +113,7 @@ public class UserPostgres implements UserDAO {
 				user.setFirstName(resultSet.getString("first_name"));
 				user.setLastName(resultSet.getString("last_name"));
 				user.setUserName(resultSet.getString("user_name"));
-				user.setPassWord(resultSet.getString("password"));
+				user.setPassWord(resultSet.getString("pass_word"));
 				role.setRoleName(resultSet.getString("role"));
 
 				PitchDAO pitchDAO = DAOFactory.getPitchDAO();
@@ -133,7 +133,7 @@ public class UserPostgres implements UserDAO {
 	public void update(User updatedObj) {
 		Connection conn = connFactory.getConnection();
 		try {
-			String sql = "update users set  username=?, password=?, first_name=?, last_name=?, role?" 
+			String sql = "update users set  username=?, pass_word=?, first_name=?, last_name=?, role?" 
 					+ "where id=?";
 			PreparedStatement prepStatement = conn.prepareStatement(sql);
 			prepStatement.setString(3, updatedObj.getFirstName());
@@ -205,7 +205,7 @@ public class UserPostgres implements UserDAO {
 	public User getByUsername(String username) {
 		User user = null;
 		try (Connection conn = connFactory.getConnection()) {
-			String sql = "select * from users join user_pitches on users.id=users_pitches.users_id"
+			String sql = "select * from users left join user_pitches on users.id=users_pitches.users_id"
 					+ " where users.user_name = ?";
 			PreparedStatement prepStatement = conn.prepareStatement(sql);
 			prepStatement.setString(1, username);
@@ -217,7 +217,7 @@ public class UserPostgres implements UserDAO {
 				user.setFirstName(resultSet.getString("first_name"));
 				user.setLastName(resultSet.getString("last_name"));
 				user.setUserName(username);
-				user.setPassWord(resultSet.getString("password"));
+				user.setPassWord(resultSet.getString("pass_word"));
 
 				PitchDAO pitchDAO = DAOFactory.getPitchDAO();
 				user.setPitches(pitchDAO.getByPitch(user));

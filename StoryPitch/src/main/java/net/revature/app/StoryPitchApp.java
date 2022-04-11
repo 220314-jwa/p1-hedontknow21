@@ -88,7 +88,7 @@ public class StoryPitchApp {
 			try {
 				User user = userServ.logIn(username, password);
 				ctx.json(user);
-			} catch (net.revature.exceptions.IncorrectCredentialsException e) {
+			} catch (IncorrectCredentialsException e) {
 				ctx.status(HttpCode.UNAUTHORIZED); // 401 unauthorized - must be logged in
 			}
 			
