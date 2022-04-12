@@ -44,7 +44,7 @@ public interface UserService {
 	 * @return User with newly generated ID
 	 *  
 	 */
-	public User register(User newUser) throws UserNameAlreadyExistsException;
+	public User registerUserSuccessfully(User newUser) throws UserNameAlreadyExistsException;
 	/**
 	 * 
 	 * @param user

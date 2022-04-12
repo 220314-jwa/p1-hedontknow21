@@ -6,20 +6,34 @@ package net.revature.services;
 //instead of this:
 //Assertions.assertTrue(result);
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import net.revature.data.PitchDAO;
+import net.revature.data.UserDAO;
 import net.revature.exceptions.AlreadySubmittedException;
 import net.revature.exceptions.IncorrectCredentialsException;
 import net.revature.exceptions.UserNameAlreadyExistsException;
 import net.revature.models.User;
 import net.revature.models.Pitch;
 
-
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 	//Create a field for the class we are testing
+	@Mock // says that we want Mockito to create a mock version of the object
+	private UserDAO userDAO;
+	@Mock
+	private PitchDAO pitchDAO;
+	
+	// we need a field for the class that we're testing
+	@InjectMocks // this is where Mockito needs to inject the mocks
 	private UserService userService = new UserServiceImpl();
 	
 	// create a test method that is void and always has no parameters
@@ -35,6 +49,12 @@ public class UserServiceTest {
 		String username = "avery";
 		String password = "pass";
 		
+		// mocking : we need to mock userDAO.getUsername(username)
+		// we're expecting a user with matching username & password
+		User mockUser = new User();
+		mockUser.setUserName(username);
+		mockUser.setPassWord(password);
+		when(userDAO.getByUsername(username)).thenReturn(mockUser);
 		
 		// have to call upon the method that we are trying to test
 		User result = userService.logIn(username, password);
@@ -50,6 +70,10 @@ public class UserServiceTest {
 		String username = "agbuiij";
 		String password = "367682";
 		
+		
+		// we need to mock userDao. getBYusername(username);
+		when(userDAO.getByUsername(username)).thenReturn(null);
+		
 		assertThrows(IncorrectCredentialsException.class, () ->{
 			// this where we place the code that is expected to throw the exception
 			userService.logIn(username, password);
@@ -62,6 +86,16 @@ public class UserServiceTest {
 		String username = "avery";
 		String password = "9786796";
 		
+		
+		// mocking : we need to mock userDAO.getUsername(username)
+				// we're expecting a user with matching username & password
+				User mockUser = new User();
+				mockUser.setUserName(username);
+				mockUser.setPassWord("fake_password");
+				when(userDAO.getByUsername(username)).thenReturn(mockUser);
+		
+		
+		
 		assertThrows(IncorrectCredentialsException.class, () ->{
 			// this where we place the code that is expected to throw the exception(same as wrong username)
 			userService.logIn(username, password);
@@ -73,14 +107,14 @@ public class UserServiceTest {
 	public void registerUserSuccessfully() throws UserNameAlreadyExistsException {
 		User newUser = new User();
 		
-		User result = userService.register(newUser);
+		User result = userService.registerUserSuccessfully(newUser);
 		
 
 		// the behavior that i'm looking for is that the
 		// method returns the User with their newly generated ID,
 		// so i want to make sure the ID was generated (not the default)
 		
-		assertNotEquals(1, result.getId());
+		assertNotEquals(0, result.getId());
 	}
 	
 	// seeing the username is take but passing in one that already exist to test if it actuallt take in the program
@@ -90,7 +124,7 @@ public class UserServiceTest {
 		newUser.setUserName("avery");
 		
 		assertThrows(UserNameAlreadyExistsException.class, () ->{
-			userService.register(newUser);
+			userService.registerUserSuccessfully(newUser);
 		});
 		
 		
@@ -133,6 +167,17 @@ public class UserServiceTest {
 		User testUser = new User();
 		Pitch testPitch = new Pitch();
 		
+		// pitchDAO.getById : return testPitch
+		when(pitchDAO.getById(testPitch.getId())).thenReturn(testPitch);
+		//userDAO.getById : return testUser
+		when(userDAO.getById(testUser.getId())).thenReturn(testUser);
+		//pitchDAO.update : do nothing
+		// when Pitch DAO update is called with any pitch object, do nothing
+		doNothing().when(pitchDAO).update(any(Pitch.class));
+		//userDAO.update: do nothing
+		doNothing().when(userDAO).update(any(User.class));
+		//userDAO.updatePitches: do nothing
+		
 		User result = userService.submittedPitch(testUser, testPitch);
 		
 		// there are two behaviors i'm looking for:
@@ -141,9 +186,14 @@ public class UserServiceTest {
 				// to check this, i'm checking that the pitch with the Submitted
 				// status is in the user's list.
 		
-		testPitch.setStatus("Submitted");
+		testPitch.setStatus("Unsubmitted");
 		List<Pitch> userPitches = result.getPitches();
 		assertTrue(userPitches.contains(testPitch));
+		
+		// Mockito.verify allows you to make sure that a particular mock method
+		// was called (or that it was never called, or how many times, etc.)
+		verify(pitchDAO, times(1)).update(any(Pitch.class));
+
 		
 		
 		

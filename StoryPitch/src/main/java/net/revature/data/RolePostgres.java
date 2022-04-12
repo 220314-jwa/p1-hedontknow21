@@ -20,7 +20,7 @@ public class RolePostgres implements RoleDAO{
 	public int  getByRoleName(String role_name) {
 		Role role = null;
 		try (Connection conn = connFactory.getConnection()) {
-			String sql = "select * from user_role where user_role.id = ?";
+			String sql = "select * from user_role where user_role.name = ?";
 			PreparedStatement prepStatement = conn.prepareStatement(sql);
 			// passing in a string to get the int value from db
 			prepStatement.setString(1, role_name);
@@ -29,8 +29,8 @@ public class RolePostgres implements RoleDAO{
 			if (resultSet.next()) {
 				
 				
-				resultSet.getInt("id");
-				return resultSet.getInt("id");
+				resultSet.getString("name");
+				return resultSet.getInt("name");
 
 				
 			}

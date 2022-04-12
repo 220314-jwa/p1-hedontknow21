@@ -27,12 +27,13 @@ public class PitchPostgres implements PitchDAO {
 public int create(Pitch newObj) throws SQLException {
 	// this method needs to insert the object into the database
 	// so we need to connect to the database
+	int generatedKeys = 0;
 	
 		Connection	connection = connFactory.getConnection();
 		
 		// this stores our sql command, that we would normally write in DBeaver/command line
-		String sql = "insert into story_pitch (id, users_id, tentative_title, exp_completion_date, length_type, one_sentence_blurb, description, status_id, role_id, genre_id)" +
-		"values(default,?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into story_pitch ( users_id, tentative_title, exp_completion_date, length_type, one_sentence_blurb, description, status_id, role_id, genre_id)" +
+		"values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		try {
 		// create a prepared statement
 		PreparedStatement preparedStatement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
@@ -58,20 +59,18 @@ public int create(Pitch newObj) throws SQLException {
 		// passing in the users id
 		preparedStatement.setInt(1, newObj.getUsersId());
 		
-		
+		connection.setAutoCommit(false);
 		// execute this command, return number of rows affected
-		int count = preparedStatement.executeUpdate();
+		 preparedStatement.executeUpdate();
 		// let us return the id that is auto-generated
 		ResultSet resultSet = preparedStatement.getGeneratedKeys();
 		// if we affected one or more rows:
-		if(count > 0) {
+		if(resultSet.next()) {
 		System.out.println("Pitch added");
 		// return the generated id:
 		//before we call resultSet.next(), its basically pointing to nothing
 		// useful but moving that pointer allows us to get the information that we want
-		resultSet.next();
-		int id = resultSet.getInt(1);
-		newObj.setId(id);
+		generatedKeys = resultSet.getInt(1);
 		connection.commit(); // commit the changes to the DB
 		// if 0 rows are affected, something went wrong:
 		}else {
@@ -94,7 +93,7 @@ public int create(Pitch newObj) throws SQLException {
 			e.printStackTrace();
 		}
 	}
-		return newObj.getId();
+		return generatedKeys;
 	
 }
 
@@ -270,7 +269,7 @@ public List<Pitch> getByStatus(String status) {
 		String sql = "select * from story_pitch where status_id=?";
 		PreparedStatement prepStatement = conn.prepareStatement(sql);
 		
-		prepStatement.setString(7, status);
+		prepStatement.setString(1, status);
 		
 		ResultSet resultSet = prepStatement.executeQuery();
 		while (resultSet.next()) {

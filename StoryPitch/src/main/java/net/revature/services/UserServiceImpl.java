@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public User register(User newUser) throws UserNameAlreadyExistsException {
+	public User registerUserSuccessfully(User newUser) throws UserNameAlreadyExistsException {
 		int id = 0;
 		try {
 			id = userDao.create(newUser);
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService{
 		storyToPitch = pitchDao.getById(storyToPitch.getId());
 
 		// make sure the pitch is not already submitted
-		if(storyToPitch.getStatus().equals("Submitted")) {
+		if(storyToPitch.getStatus().equals("Unsubmitted")) {
 			throw new AlreadySubmittedException();
 		}else {
 			// check user to make sure account is valid

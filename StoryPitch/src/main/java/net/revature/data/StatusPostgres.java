@@ -21,7 +21,7 @@ public class StatusPostgres implements StatusDAO{
 	public int getByStatusName(String status) {
 		Status s = null;
 		try (Connection conn = connFactory.getConnection()) {
-			String sql = "select * from status where status_name.id = ?";
+			String sql = "select * from status where status.name = ?";
 			PreparedStatement prepStatement = conn.prepareStatement(sql);
 			// passing in a string to get the int value from db
 			prepStatement.setString(1, status);
@@ -30,7 +30,7 @@ public class StatusPostgres implements StatusDAO{
 			if (resultSet.next()) {
 				
 				
-				resultSet.getInt("id");
+				resultSet.getString("name");
 				return resultSet.getInt("id");
 
 				

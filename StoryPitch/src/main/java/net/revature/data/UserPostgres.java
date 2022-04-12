@@ -22,6 +22,8 @@ public class UserPostgres implements UserDAO {
 
 	@Override
 	public int create(User newObj) throws SQLException {
+		
+		int genereatedId = 0;
 
 		Connection conn = connFactory.getConnection();
 		try {
@@ -40,7 +42,7 @@ public class UserPostgres implements UserDAO {
 			ResultSet resultSet = prepStatement.getGeneratedKeys();
 
 			if (resultSet.next()) {
-				newObj.setId(resultSet.getInt(1));
+				genereatedId = resultSet.getInt(1);
 				conn.commit();
 			} else {
 				conn.rollback();
@@ -60,7 +62,7 @@ public class UserPostgres implements UserDAO {
 			}
 		}
 
-		return newObj.getId();
+		return genereatedId;
 	}
 
 	@Override
@@ -101,7 +103,7 @@ public class UserPostgres implements UserDAO {
 			// a full join would be fine too since everything in the user_pitches table
 			// will have a user associated with it, but a left join makes more sense
 			// logically
-			String sql = "select * from users left join user_pitches on user.id=users.users_id";
+			String sql = "select * from users left join user_pitches on users.id=user_pitches.users_id";
 			Statement statment = conn.createStatement();
 
 			ResultSet resultSet = statment.executeQuery(sql);
@@ -114,7 +116,7 @@ public class UserPostgres implements UserDAO {
 				user.setLastName(resultSet.getString("last_name"));
 				user.setUserName(resultSet.getString("user_name"));
 				user.setPassWord(resultSet.getString("pass_word"));
-				role.setRoleName(resultSet.getString("role"));
+				role.setId(resultSet.getInt("role_id"));
 
 				PitchDAO pitchDAO = DAOFactory.getPitchDAO();
 				user.setPitches(pitchDAO.getByPitch(user));
@@ -205,7 +207,7 @@ public class UserPostgres implements UserDAO {
 	public User getByUsername(String username) {
 		User user = null;
 		try (Connection conn = connFactory.getConnection()) {
-			String sql = "select * from users left join user_pitches on users.id=users_pitches.users_id"
+			String sql = "select * from users left join user_pitches on users.id=user_pitches.users_id"
 					+ " where users.user_name = ?";
 			PreparedStatement prepStatement = conn.prepareStatement(sql);
 			prepStatement.setString(1, username);

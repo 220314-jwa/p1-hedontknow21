@@ -69,7 +69,7 @@ public class StoryPitchApp {
 			User newUser = ctx.bodyAsClass(User.class);
 
 			try {
-				newUser = userServ.register(newUser);
+				newUser = userServ.registerUserSuccessfully(newUser);
 				ctx.json(newUser);
 			} catch (UserNameAlreadyExistsException e) {
 				ctx.status(HttpCode.CONFLICT); // 409 conflict - 
