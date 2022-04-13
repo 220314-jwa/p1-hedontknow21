@@ -232,4 +232,41 @@ public class UserPostgres implements UserDAO {
 		return user;
 	}
 
+	@Override
+	public void updatePitches(int pitchId, int userId) throws SQLException {
+		Connection connection = connFactory.getConnection();
+		
+		try {
+			String sql = "INSERT into user_pitches (story_pitch_id, users_id) values (?,?)";
+			PreparedStatement prepStatment = connection.prepareStatement(sql);
+			prepStatment.setInt(1, pitchId);
+			prepStatment.setInt(2, userId);
+			
+			connection.setAutoCommit(false); // using ACID transaction management
+			int rowUpdated = prepStatment.executeUpdate();
+			
+			if(rowUpdated==1) {
+				connection.commit();
+			}else {
+				connection.rollback();
+			}
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			try {
+				connection.rollback();
+			}catch(SQLException e1) {
+				e.printStackTrace();
+			}
+			throw e;
+		}finally {
+			try {
+				connection.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
 }

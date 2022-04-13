@@ -1,5 +1,7 @@
 package net.revature.data;
 
+import java.sql.SQLException;
+
 import net.revature.models.User;
 
 public interface UserDAO extends GenericDAO<User>{
@@ -9,4 +11,5 @@ public interface UserDAO extends GenericDAO<User>{
 		//have the types as User
 		public User getByUsername(String username);
 		public User getById(int usersId);
+		public void updatePitches(int pitchId, int userId) throws SQLException;
 }

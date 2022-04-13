@@ -77,4 +77,12 @@ public interface UserService {
 	 */
 	public User getUserById(int id);
 
+	List<Pitch> viewUnSubmittedPitches();
+	/*
+	 * @return the list of unsubmitted pitches
+	 * 
+	 * 
+	 */
+	
+
 }

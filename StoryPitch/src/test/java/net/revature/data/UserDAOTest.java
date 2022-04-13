@@ -37,7 +37,7 @@ public class UserDAOTest {
 	}
 	
 	@AfterAll
-	public static void cleanUp() throws SQLException {
+	public static void cleanUp()  {
 		userDao.delete(testUser);
 	}
 		
@@ -52,7 +52,7 @@ public class UserDAOTest {
 	
 	@Test
 	public void getByUsernameDoesNotExist() {
-		User user = userDao.getByUsername("qwertyuiop");
+		User user = userDao.getByUsername("yooo");
 		assertNull(user);
 	}
 	
@@ -76,8 +76,8 @@ public class UserDAOTest {
 		int id = testUser.getId();
 		
 		User user = userDao.getById(id);
-		
 		assertEquals(testUser, user);
+		
 	}
 	
 	@Test

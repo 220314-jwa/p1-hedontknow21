@@ -8,8 +8,12 @@ package net.revature.services;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-
+import java.sql.SQLException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -82,6 +86,7 @@ public class UserServiceTest {
 	}
 	
 	// testing the wrong password of the user
+	@Test
 	public void logInWrongPassword() {
 		String username = "avery";
 		String password = "9786796";
@@ -104,8 +109,11 @@ public class UserServiceTest {
 	
 	// registering the user correctly
 	@Test
-	public void registerUserSuccessfully() throws UserNameAlreadyExistsException {
+	public void registerUserSuccessfully() throws UserNameAlreadyExistsException, SQLException {
 		User newUser = new User();
+		
+		when(userDAO.create(newUser)).thenReturn(1);
+	
 		
 		User result = userService.registerUserSuccessfully(newUser);
 		
@@ -119,9 +127,11 @@ public class UserServiceTest {
 	
 	// seeing the username is take but passing in one that already exist to test if it actuallt take in the program
 	@Test
-	public void registerUsernameTaken() {
+	public void registerUsernameTaken() throws SQLException {
 		User newUser = new User();
 		newUser.setUserName("avery");
+		
+		when(userDAO.create(newUser)).thenReturn(0);
 		
 		assertThrows(UserNameAlreadyExistsException.class, () ->{
 			userService.registerUserSuccessfully(newUser);
@@ -134,32 +144,53 @@ public class UserServiceTest {
 	// seeing all the pitches in the list
 	@Test
 	public void viewPitchesSuccessfully() {
-		List<Pitch> pitches = userService.viewSubmittedPitches();
+		when(pitchDAO.getByStatus("unsubmitted")).thenReturn(Collections.emptyList());
+		when(pitchDAO.getByStatus("submitted")).thenReturn(Collections.emptyList());
+		List<Pitch> pitches = userService.viewUnSubmittedPitches();
+		List<Pitch> pitchs = userService.viewSubmittedPitches();
 		
 		
 		// i just want to make sure that the pitches are returned -
 				//  don't need to check that the pitches are all available
 				// because that filtering happens in the database. i just
 				// need to check that the pitches list isn't null
-		assertNotNull(pitches); // -checks the object of the pitches list to see if it is not null
+		assertNotNull(pitches);
+		assertNotNull(pitchs);// -checks the object of the pitches list to see if it is not null
 	}
 	
 	
 	@Test
 	public void checkByStatus() {
-		String status = "submitted";
+		String status = "unsubmitted";
+		// mock pitchDAO.getAll()
+		// i'm making a list that contains a pitch with the status
+		// and a pitch without the status to make sure the service
+		// is filtering them out properly
+		List<Pitch> mockPitches = new LinkedList<Pitch>();
+		Pitch unSub = new Pitch();
+		unSub.setStatus(status);
+		Pitch sub = new Pitch();
+		sub.setStatus("submitted");
+		mockPitches.add(sub);
+		mockPitches.add(unSub);
+		
 		List<Pitch> pitchByStatus = userService.searchPitchByStatus(status);
 		
-		boolean onlySubmitsList = true;
+		
+		
+		
+		boolean onlyUnSubmitsList = true;
 		for(Pitch pitch :pitchByStatus) {
 			String pitchStatus = pitch.getStatus().toLowerCase();
 			if(!pitchStatus.contains(status)) {
 				// then set boolean to false
-				onlySubmitsList = false;
+				onlyUnSubmitsList = false;
 				// the stop the loop because the status is not available
 				break;
 			}
 		}
+		
+		assertTrue(onlyUnSubmitsList);
 	}
 	@Test
 	public void submitPitchSuccessfully() throws Exception {
@@ -186,7 +217,7 @@ public class UserServiceTest {
 				// to check this, i'm checking that the pitch with the Submitted
 				// status is in the user's list.
 		
-		testPitch.setStatus("Unsubmitted");
+		testPitch.setStatus("Submitted");
 		List<Pitch> userPitches = result.getPitches();
 		assertTrue(userPitches.contains(testPitch));
 		
@@ -200,16 +231,23 @@ public class UserServiceTest {
 		
 	}
 	@Test
-	public void pitchAlreadySubmitted() {
+	public void pitchAlreadySubmitted() throws SQLException {
 		//check to see if the pitch is already submitted
 		User testUser = new User();
 		Pitch testPitch = new Pitch();
 		
 		testPitch.setStatus("Submitted");
 		
+		when(pitchDAO.getById(testPitch.getId())).thenReturn(testPitch);
+		
 		assertThrows(Exception.class, () ->{
 			userService.submittedPitch(testUser, testPitch);
 		});
+		
+		
+		verify(pitchDAO, never()).update(any(Pitch.class));
+		verify(userDAO, never()).update(any(User.class));
+		verify(userDAO, never()).updatePitches(testPitch.getId(), testUser.getId());
 	}
 	
 	

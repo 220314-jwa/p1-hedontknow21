@@ -76,6 +76,20 @@ public class UserServiceImpl implements UserService{
 
 		return pitchDao.getById(id);
 	}
+	
+	@Override
+	public List<Pitch> viewUnSubmittedPitches() {
+
+		//return pitchDao.getByStatus("Submitted");
+
+		 //alternative using Java 8 Streams (less SQL, more Java)
+				// if you're interested :)
+				List<Pitch> pitches = pitchDao.getAll();
+				pitches = pitches.stream()
+						.filter((pitch) -> pitch.getStatus().equals("1"))
+						.collect(Collectors.toList());
+				return pitches;
+	}
 
 	@Override
 	public List<Pitch> viewSubmittedPitches() {
@@ -90,6 +104,8 @@ public class UserServiceImpl implements UserService{
 						.collect(Collectors.toList());
 				return pitches;
 	}
+	
+	
 
 	@Override
 	public List<Pitch> searchPitchByStatus(String status) {

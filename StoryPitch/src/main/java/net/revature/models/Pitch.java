@@ -27,9 +27,9 @@ public class Pitch {
 		lengthType = "";
 		oneSentenceBlurb = "";
 		description = "";
-		status = getStatus();
-		role = getRole();
-		genre = getGenre();
+		status = "";
+		role = "";
+		genre = "";
 	}
 	
 	
