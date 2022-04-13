@@ -144,10 +144,10 @@ public class UserServiceTest {
 	// seeing all the pitches in the list
 	@Test
 	public void viewPitchesSuccessfully() {
-		when(pitchDAO.getByStatus("unsubmitted")).thenReturn(Collections.emptyList());
-		when(pitchDAO.getByStatus("submitted")).thenReturn(Collections.emptyList());
+		when(pitchDAO.getByStatus("Unsubmitted")).thenReturn(Collections.emptyList());
+		
 		List<Pitch> pitches = userService.viewUnSubmittedPitches();
-		List<Pitch> pitchs = userService.viewSubmittedPitches();
+		//List<Pitch> pitchs = userService.viewSubmittedPitches();
 		
 		
 		// i just want to make sure that the pitches are returned -
@@ -155,7 +155,7 @@ public class UserServiceTest {
 				// because that filtering happens in the database. i just
 				// need to check that the pitches list isn't null
 		assertNotNull(pitches);
-		assertNotNull(pitchs);// -checks the object of the pitches list to see if it is not null
+		//assertNotNull(pitchs);// -checks the object of the pitches list to see if it is not null
 	}
 	
 	
@@ -231,7 +231,7 @@ public class UserServiceTest {
 		
 	}
 	@Test
-	public void pitchAlreadySubmitted() throws SQLException {
+	public void pitchAlreadySubmitted() throws Exception  {
 		//check to see if the pitch is already submitted
 		User testUser = new User();
 		Pitch testPitch = new Pitch();
@@ -240,7 +240,7 @@ public class UserServiceTest {
 		
 		when(pitchDAO.getById(testPitch.getId())).thenReturn(testPitch);
 		
-		assertThrows(Exception.class, () ->{
+		assertThrows(SQLException.class, () ->{
 			userService.submittedPitch(testUser, testPitch);
 		});
 		
