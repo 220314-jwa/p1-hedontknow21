@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Own Work</title>
+
+    </head>
+    <body>
+        <!---- Using JS scripts in html-->
+        <!---- DOM manipulation in HTML using javascript-->
+        <!--- Selecting elements by ID-->
+
+        <p id="demo">This is a paragraph.</p>
+        <!--- gets the elements with the id of demo and changes it using .innerHTML-->
+        <script>
+            document.getElementById("demo").innerHTML = "Paragraph Changed";
+        </script>
+
+        <!--- selecting elements by ClassName-->
+
+        <div class="test">This is a div element with class="test".<div>
+
+            <p>
+                <h1 class="test">This is a h1 element with class="test". </h1>
+                This is a paragraph.
+            </p>
+
+            <p class="test">This is a p element with class="test".</p>
+            <!--- gets the elements with the class name and changes their background to yellow-->
+            <script>
+                let matches = document.getElementsByClassName("test");
+                for(let elem in matches){
+                    matches[elem].style.background = "yellow";
+                }
+            </script>
+
+            <!--- getting elements by tagName-->
+
+            <h2>Heading</h2>
+            <p>This is a paragraph of a text.</p>
+            <div>This is another paragraph of text.</div>
+            <p>This is one more paragraph of text.</p>
+
+            <!---- selects elements of tagName p and changes them to red after a for loop-->
+            <script>
+                let match = document.getElementsByTagName("p");
+
+                for(let elems in match){
+                    match[elems].style.background = "red";
+                }
+            </script>
+
+            <!--- selecting elements withh css properties-->
+
+            <p id="para">This is a paragraph.</p>
+            <ul>
+                <li>Apple</li>
+                <li>Orange</li>
+                <li>Mango</li>
+            </ul>
+
+            <script>
+                let matchy = document.querySelectorAll("ul li");
+
+                for(e in matchy){
+                    document.write(e.innerHTML + "<br>");
+                }
+
+                document.write(document.querySelector('#para').textContent);
+
+            </script>
+
+            <!--- Traversing the DOM
+            we use the dom to do anything with elements and their contents
+            document object is the root of every DOM
+            documentElement property - referes to the <html> tag
+                doc head refers to the head tag
+                doc body refers to the body tag 
+            -->
+
+            <!-- Parent Nodes-->
+            <!--- parent node is 1 level above in the DOM tree-->
+            <div id="main">
+                <p id="para">This is a note</p>
+            </div>
+
+            <script>
+                let elmt = document.querySelector('#para');
+                document.write(elmt.parentNode+ "<br>");
+
+                alert(document.documentElement.parentNode);
+                alert(document.documentElement.parentElement);
+            </script>
+
+            <!----Child Nodes
+            childNOdes - returns a list of child nodes, including text ones
+            firstChild - gives access to first child
+            lastChild gives acces to last child
+            -->
+
+            <div id="myDiv">
+                <p>This is a paragraph - first child</p>
+                <div>This is a div element</div>
+
+            </div>
+
+            <script>
+                let elmnt = document.querySelector('#myDiv');
+                document.write("<br> Child nodes of div element: <br>");
+                for(let i = 0; i< elmnt.childNodes.length; i++){
+                    document.write(elmnt.childNodes[i] + "<br>");
+                }
+
+                document.write("<br> First child of div element: <br>" +elmnt.firstChild);
+
+                document.write("<br> Last child of div element: <br>" +elmnt.lastChild);
+            </script>
+
+            <!----Sibling NOdes
+            previous sibling- gives acces to node right before it
+            next Sibling - gives acces to the sibling next after it
+            -->
+
+            <ul>
+                <li>list Item</li>
+                <li class="list">list Item 2</li>
+                <li>list Item 3</li>
+
+            </ul>
+
+            <script>
+                const secondListItem = document.querySelector('.list');       
+        document.write(secondListItem.previousElementSibling.textContent) ;  // outputs:  "list item 1"
+       document.write(secondListItem.nextElementSibling.textContent);   //outputs: "list item 3"  
+            </script>
+            
+
+        </body>
+</html>

@@ -1,0 +1,204 @@
+<!-- Document type of HTML 5 -->
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Title tag for Browser to display information about the window -->
+		<link rel="stylesheet" href="basicCss.css">
+		
+		<style>
+			/* 
+				To reference an element using CSS we use selectors
+				These can be done using attributes or elements available in the HTML
+			*/
+
+			/*
+				Instead of applying a style to each tag one by one, we can do multiple
+				at once 
+			*/
+
+			/*
+			You can use specific selectors, but there are universal selectors
+			*/
+
+			/* * {
+				background-color: rgb(14, 75, 77);
+				text-align:center;
+			} */
+
+			table {
+				border-width: 10px;
+				border-color:rgb(139, 0, 139);
+				border-style: solid;
+				
+			}
+			table,th,td {
+				font-size:10pt;
+				border:1px solid #887744;
+				border-collapse: collapse;
+			}
+
+			td {
+				border: solid 2px lightgrey;
+			}
+
+			h1, h2, h3, h4 {
+				color:hsl(0, 45%, 55%);
+				font: 900;
+				font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+			}
+
+			/*
+			In order to specifiy unique elements, we use an ID selector with CSS
+			This requires for the ID to be unique and applied to an element in order
+			to be actually used
+			*/
+
+			/*
+			ID selector gets the highest priority for styling over any other selector
+			*/
+			#firstHeader, #notUsedId {
+				color:aquamarine;
+			}
+
+			/*
+			Class selector is used to group elements together 
+			*/
+			.groupedHeaders {
+				font-family: cursive;
+				color: #432366
+			}
+
+			#uniqueParagraph {
+				color:#8b008b;
+			}
+
+		</style>
+		<title>HTML Basics</title>
+	</head>
+	<body>
+
+		<!-- Header tags -->
+		<h1 id="firstHeader">Header 1</h1>
+		<h2>Header 2</h2>
+		<h3>Header 3</h3>
+		<h4 class="groupedHeaders" id="notUsedId">Header 4</h4>
+		<h5 class="groupedHeaders">Header 5</h5>
+		<h6 class="groupedHeaders">Header 6</h6>
+
+		<!-- Paragraph tag -->
+		<p>Paragraph</p>
+
+		<!-- Anchors tag, used to link between sites -->
+		<a href="https://google.com/">Click me</a>
+
+		<!-- Table tag -->
+		<table>
+			<!-- Table row -->
+			<tr>
+				<!-- Header tag -->
+				<th>Name</th>
+				<th>Age</th>
+			</tr>
+			<tr>
+				<!-- Table divisions -->
+				<td>Greg</td>
+				<td>1223</td>
+			</tr>
+			<tr>
+				<td>Greg</td>
+				<td>1223</td>
+			</tr>
+		</table>
+
+		<!-- Used to list content -->
+		<li>Item 1</li>
+		<li>Item 2</li>
+		<li>Item 3</li>
+
+		<!-- Ordered lists in a specific order -->
+		<ol>
+			<li>Item 1</li>
+			<li>Item 2</li>
+			<li>Item 3</li>
+		</ol>
+
+		<!-- Unordered list -->
+		<ul>
+			<li>Item 1</li>
+			<li>Item 2</li>
+			<li>Item 3</li>
+		</ul>
+
+		<div id="textDiv">
+			<p>
+				<!-- Emphasize text -->
+				<em>Emphasized tag</em>
+				<!-- Line breaks -->
+				<br>
+				<!-- Bold Text -->
+				<b>Bold Text</b>
+				<br>
+				<!-- Italic Text -->
+				<i>Italic Text</i>
+				<br>
+			</p>
+		</div>
+
+		<!-- Image tags: use src within the img tag to link to where the image actually is -->
+		<!-- Change the width and height attributes of the image tag-->
+		<!-- This is all within the image tag and so it is referenced as an attribute -->
+		<img src="images\07CAT-STRIPES-mediumSquareAt3X-v2.jpg" width="100px" height="100px">
+	
+
+
+		<!-- Semantic Elements -->
+
+		<!-- -->
+		<div>
+			<h1> Welcome to my Div</h1>
+		</div>
+
+		<main>
+			<p>Hi this is the main content on my page</p>
+		</main>
+
+		<footer>
+			<p><small>This is the footer</small></p>
+		</footer>
+
+		<nav>
+			<!-- The order that you wrap your elements matters-->
+			<a href="https://google.com/">
+				<button>Anchor around button</button>
+			</a>
+			<button>
+				<a href="https://google.com/">
+					Anchor around text
+				</a>
+			</button>
+
+			<!-- Drop down options -->
+			<select>
+				<!-- The various options available to us -->
+				<option>Texas</option>
+				<option>Virginia</option>
+			</select>
+		</nav>
+	
+		<!-- Inline CSS (Cascading Style Sheet) -->
+		<!-- Use the attribute style -->
+		<div>
+			<!-- CSS Syntax Inline: property : value ; property2 : value2 ; propertyn : valuen-->
+			<h2 style="font-family: 'Segoe UI';">This is styled with Inline CSS</h2>
+			<!-- Color can be specified by using names, hex, rgb values or rgba for transparency-->
+			<p style="color:darkmagenta">This is paragraph</p>
+			<p id="uniqueParagraph">This is paragraph</p>
+			<p style="color:rgb(139, 0, 139)">This is paragraph</p>
+			<p style="color:rgba(139, 0, 139, 1)">This is paragraph</p>
+			<p style="color:hsl(0, 45%, 55%)">hsl</p>
+		</div>
+	
+	</body>
+</html>
