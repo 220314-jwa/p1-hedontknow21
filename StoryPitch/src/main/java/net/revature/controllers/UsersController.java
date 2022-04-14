@@ -6,6 +6,7 @@ import net.revature.services.UserService;
 
 import net.revature.exceptions.UserNameAlreadyExistsException;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 
@@ -25,7 +26,7 @@ public class UsersController {
 		try {
 			newUser = userServ.registerUserSuccessfully(newUser);
 			ctx.json(newUser);
-		} catch (UserNameAlreadyExistsException e) {
+		} catch (UserNameAlreadyExistsException | SQLException e) {
 			ctx.status(HttpCode.CONFLICT); // 409 conflict
 		}
 	}

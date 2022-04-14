@@ -32,6 +32,7 @@ public class PitchDAOTest {
 	public static void setUP() throws Exception {
 		// this is the base test pitch used for most tests
 				testPitch.setTenativeTitle("test");
+				testPitch.setUsersId(1);
 				
 				// this is the pitch to test create and delete
 				Random rand = new Random();
@@ -49,14 +50,12 @@ public class PitchDAOTest {
 			}
 			
 			@Test
-			@Disabled
 			public void getByUserExists() {
 				userDAO.getAll().contains(testUser);
 				
 			}
 			
 			@Test
-			@Disabled
 			public void getByUserDoesNotExist() {
 				List<User> users = userDAO.getAll();
 				
@@ -72,8 +71,8 @@ public class PitchDAOTest {
 			}
 			
 			@Test
-			public void getByStatus() {
-				String testStatus = "Unsubmitted";
+			public void getByStatus(String testStatus) {
+				testStatus = "Unsubmitted";
 				List<Pitch> pitches = pitchDAO.getByStatus(testStatus);
 				
 				boolean onlyCorrectStatus = true;
@@ -121,12 +120,7 @@ public class PitchDAOTest {
 				});
 			}
 			
-			@Test
-			public void updateUserDoesNotExist() {
-				assertThrows(SQLException.class, () -> {
-					pitchDAO.update(new Pitch());
-				});
-			}
+			
 			
 			@Test
 			@Order(2)
@@ -136,12 +130,6 @@ public class PitchDAOTest {
 				});
 			}
 			
-			@Test
-			public void deleteUserDoesNotExist() {
-				
-				assertThrows(SQLException.class, () -> {
-					pitchDAO.delete(new Pitch());
-				});
-			}
+			
 
 }

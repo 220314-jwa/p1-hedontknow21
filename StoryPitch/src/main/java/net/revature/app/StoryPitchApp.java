@@ -24,9 +24,11 @@ public class StoryPitchApp {
 		app.routes(() -> {
 			// all paths starting with /pitches, pitchs
 			path("pitches", () -> {
+				
 				get(PitchesController::getPitches);
-				path("pitchs", () -> {
-					get(PitchesController::getPitchs);
+				
+				//path("pitchs", () -> {
+					//get(PitchesController::getPitchs);
 				
 				// /pitches/4 or pitchs/1
 				path("{id}", () -> {
@@ -48,8 +50,8 @@ public class StoryPitchApp {
 			});
 		});
 			
-		});
-	}}
+		};
+	}
 		
 		
 		

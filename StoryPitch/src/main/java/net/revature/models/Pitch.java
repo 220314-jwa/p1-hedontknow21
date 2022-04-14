@@ -23,7 +23,7 @@ public class Pitch {
 		id = 0;
 		usersId = getUsersId();
 		tenativeTitle = "";
-		expCompletionDate = getExpCompletionDate();
+		expCompletionDate = Date.valueOf(LocalDate.now());
 		lengthType = "";
 		oneSentenceBlurb = "";
 		description = "";

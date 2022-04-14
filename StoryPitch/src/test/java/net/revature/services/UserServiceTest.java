@@ -161,7 +161,7 @@ public class UserServiceTest {
 	
 	@Test
 	public void checkByStatus() {
-		String status = "unsubmitted";
+		String status = "Unsubmitted";
 		// mock pitchDAO.getAll()
 		// i'm making a list that contains a pitch with the status
 		// and a pitch without the status to make sure the service
@@ -231,7 +231,7 @@ public class UserServiceTest {
 		
 	}
 	@Test
-	public void pitchAlreadySubmitted() throws Exception  {
+	public void pitchAlreadySubmitted() throws SQLException  {
 		//check to see if the pitch is already submitted
 		User testUser = new User();
 		Pitch testPitch = new Pitch();
@@ -240,7 +240,7 @@ public class UserServiceTest {
 		
 		when(pitchDAO.getById(testPitch.getId())).thenReturn(testPitch);
 		
-		assertThrows(SQLException.class, () ->{
+		assertThrows(Exception.class, () ->{
 			userService.submittedPitch(testUser, testPitch);
 		});
 		

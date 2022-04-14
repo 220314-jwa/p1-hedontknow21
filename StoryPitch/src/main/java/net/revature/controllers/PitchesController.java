@@ -13,18 +13,18 @@ public class PitchesController {
 	private static UserService userServ = new UserServiceImpl();
 	
 	//GET /pitches from the database (unsubmitted)
-	public static void getPitches(Context ctx) {
-		ctx.json(userServ.viewUnSubmittedPitches());
-	}
+//	public static void getPitches(Context ctx) {
+//		ctx.json(userServ.viewUnSubmittedPitches());
+//	}
 	// GET /pitchs from database (submitted)
-	public static void getPitchs(Context ctx) {
-		ctx.json(userServ.viewUnSubmittedPitches());
+	public static void getPitches(Context ctx) {
+		ctx.json(userServ.getAllPitches());
 	}
 	
 	// GET /pitches or pitchs/{id} where id is the id of the pitch
 	public static void getPitchById(Context ctx) {
 		int pitchId = Integer.parseInt(ctx.pathParam("id"));
-		Pitch pitch = userServ.getPitchtById(pitchId);
+		Pitch pitch = userServ.getPitchById(pitchId);
 		if(pitch != null) {
 			ctx.json(pitch);
 		}else {
@@ -34,7 +34,7 @@ public class PitchesController {
 	
 	public static void submitPitch(Context ctx) {
 		int pitchId = Integer.parseInt(ctx.pathParam("id"));
-		Pitch pitchToSubmit = userServ.getPitchtById(pitchId);
+		Pitch pitchToSubmit = userServ.getPitchById(pitchId);
 		
 		User user = ctx.bodyAsClass(User.class);
 		

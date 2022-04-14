@@ -69,7 +69,7 @@ public class UserPostgres implements UserDAO {
 	public User getById(int id) {
 		User user = null;
 		try (Connection conn = connFactory.getConnection()) {
-			String sql = "select * from users join user_pitches on users_id.id=user_pitches.users_id"
+			String sql = "select * from users left join user_pitches on users.id=user_pitches.users_id"
 					+ " where users.id = ?";
 			PreparedStatement prepStatement = conn.prepareStatement(sql);
 			prepStatement.setInt(1, id);
@@ -135,7 +135,7 @@ public class UserPostgres implements UserDAO {
 	public void update(User updatedObj) {
 		Connection conn = connFactory.getConnection();
 		try {
-			String sql = "update users set  username=?, pass_word=?, first_name=?, last_name=?, role?" 
+			String sql = "update users set  user_name=?, pass_word=?, first_name=?, last_name=?, role?" 
 					+ "where id=?";
 			PreparedStatement prepStatement = conn.prepareStatement(sql);
 			prepStatement.setString(3, updatedObj.getFirstName());
@@ -148,10 +148,11 @@ public class UserPostgres implements UserDAO {
 			conn.setAutoCommit(false); // for ACID (transaction management)
 			int rowsUpdated = prepStatement.executeUpdate();
 
-			if (rowsUpdated <= 1) {
+			if (rowsUpdated == 1) {
 				conn.commit();
 			} else {
 				conn.rollback();
+				throw new SQLException("ERROR: no object to update");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

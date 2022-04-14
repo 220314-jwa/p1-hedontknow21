@@ -14,5 +14,5 @@ public interface PitchDAO extends GenericDAO<Pitch> {
 		public List<Pitch> getByRole(User role);
 		public List<Pitch> getByStatus(String status);
 		public List<Pitch> getByPitch(User user);
-		public List<Pitch> getAll();
+		
 }

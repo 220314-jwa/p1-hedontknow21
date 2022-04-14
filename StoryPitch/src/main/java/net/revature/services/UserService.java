@@ -1,6 +1,7 @@
 package net.revature.services;
 
 
+import java.sql.SQLException;
 import java.util.List;
 
 import net.revature.exceptions.UserNameAlreadyExistsException;
@@ -44,7 +45,7 @@ public interface UserService {
 	 * @return User with newly generated ID
 	 *  
 	 */
-	public User registerUserSuccessfully(User newUser) throws UserNameAlreadyExistsException;
+	public User registerUserSuccessfully(User newUser) throws UserNameAlreadyExistsException, SQLException;
 	/**
 	 * 
 	 * @param user
@@ -60,7 +61,7 @@ public interface UserService {
 	 * @param id
 	 * @return the pitch with the specified ID
 	 */
-	public Pitch getPitchtById(int id);
+	public Pitch getPitchById(int id);
 	/**
 	 * @param id
 	 * @return the pitch with the specified id
@@ -76,13 +77,19 @@ public interface UserService {
 	 * @return the list pitches depending on their status name
 	 */
 	public User getUserById(int id);
-
-	List<Pitch> viewUnSubmittedPitches();
 	/*
-	 * @return the list of unsubmitted pitches
+	 *
 	 * 
-	 * 
+	 *  @return the list of unsubmitted pitches
 	 */
+	public List<Pitch> viewUnSubmittedPitches();
+	/*
+	 * 
+	 * 
+	 * @return a list of all pitches
+	 * */
+	public List<Pitch> getAllPitches();
+	
 	
 
 }

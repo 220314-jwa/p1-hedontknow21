@@ -46,18 +46,18 @@ public int create(Pitch newObj) throws SQLException {
 		// instantiating the genre dao into the pitch
 		GenreDAO genreDAO = DAOFactory.getGenreDAO();
 		// passing in the genre dao string and returning as an id
-		preparedStatement.setInt(8, genreDAO.getByGenreName(newObj.getGenre()));
+		preparedStatement.setInt(8, 1);
 		// instainting the role name dao into the pitch
 		RoleDAO roleNameDAO = DAOFactory.getRoleDAO();
 		// passing in the role name dao to return as an id
-		preparedStatement.setInt(9, roleNameDAO.getByRoleName(newObj.getRole()));
+		preparedStatement.setInt(9, 1);
 		// instantiating the status dao in the pitch
 		StatusDAO statusDAO = DAOFactory.getStatusDAO();
 		//passing in the status by id
-		preparedStatement.setInt(7, statusDAO.getByStatusName(newObj.getStatus()));
+		preparedStatement.setInt(7, 1);
 		//instantiating the user into the pitch
 		// passing in the users id
-		preparedStatement.setInt(1, newObj.getUsersId());
+		preparedStatement.setInt(1, 1);
 		
 		connection.setAutoCommit(false);
 		// execute this command, return number of rows affected
@@ -157,6 +157,7 @@ public List<Pitch> getAll() {
 		StatusDAO statusDAO = DAOFactory.getStatusDAO();
 		RoleDAO roleNameDAO = DAOFactory.getRoleDAO();
 		GenreDAO genreDAO = DAOFactory.getGenreDAO();
+		
 		// Now use the DAOS to parse the string into ints
 		pitch.setStatus(statusDAO.getByStatusId(resultSet.getInt("status_id")) );
 		pitch.setRole(roleNameDAO.getByRoleId(resultSet.getInt("role_id")));
@@ -170,7 +171,7 @@ public void update(Pitch updatedObj) {
 	Connection connection = connFactory.getConnection();
 	// we create the template for the SQL string:
 	String sql = "update story_pitch set tentative_title = ?, exp_completion_date = ?, length_type = ?, one_sentence_blurb = ?"
-			+ "description = ?,status_id = ?, role_id = ?,genre_id = ? where id = ?;";
+			+ ", description = ?,status_id = ?, role_id = ?,genre_id = ? where id = ?;";
 	try {
     	PreparedStatement preparedStatement = connection.prepareStatement(sql);
     	// fill in the template:
@@ -266,7 +267,7 @@ public List<Pitch> getByRole(User role) {
 public List<Pitch> getByStatus(String status) {
 	List<Pitch> pitches = new LinkedList<>();
 	try (Connection conn = connFactory.getConnection()) {
-		String sql = "select * from story_pitch where status_id=?";
+		String sql = "select * from status where status.name=?";
 		PreparedStatement prepStatement = conn.prepareStatement(sql);
 		
 		prepStatement.setString(1, status);
@@ -303,5 +304,7 @@ public List<Pitch> getByPitch(User user) {
 	
     return pitches;
 }
+
+
 }
 
