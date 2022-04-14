@@ -1,0 +1,126 @@
+h1{
+    text-align: center;
+    color: white;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 20pt;
+}
+
+.section{
+    background-color: white;background-color: #405080;
+}
+
+.center {
+    
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 60%;
+    
+    
+
+}
+
+.foot{
+    display: block;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    height: 30%;
+}
+
+main, footer{
+    text-align: left;
+    padding: 1rem;
+    margin: 1rem auto;
+}
+
+
+
+
+body{
+    background-color: hsl(192, 100%, 50%);
+    color: white;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 16pt;
+    
+    
+
+}
+
+nav{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    
+}
+
+nav li{
+    list-style: none;
+    text-align: left;
+}
+
+a {
+    text-decoration:darkblue;
+    color:blue;
+    padding: 6rem;
+    border-radius: 1rem 1rem 1rem 1rem;
+}
+
+nav a:hover {
+    color:blue;
+    
+}
+
+#navList {
+    display: grid;
+    grid-template: 
+    "li li li li"
+    /25% 5% 25% 25%;
+    width: 100%;
+}
+
+#logInWindow {
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    display: flex;
+    justify-content: right;
+    width: 100%; 
+}
+ input, select{
+     /*background-color: darkblue;*/
+     color: hsl(192, 100%, 50%);
+     border: 2px solid white;
+     border-radius: .25rem;
+     margin: .5rem 1rem;
+ }
+
+ button {
+     background-color: hsl(192, 100%, 50%);
+     color: white;
+     font-family: Georgia, 'Times New Roman', Times, serif;
+     font-size:  14pt;
+    border-radius: 1rem;
+    border-width: .5rem;
+    padding: .5rem;
+ }
+
+ button:hover {
+     background-color: hsl(192, 100%, 50%);
+     color: blue;
+     
+ }
+
+ table, th, td {
+     border-collapse: collapse;
+     border: 2px solid blue;
+ }
+
+ th, td {
+     padding: .75rem;
+ }
