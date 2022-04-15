@@ -36,7 +36,7 @@ public class UsersController {
 		Map<String,String> credentials = ctx.bodyAsClass(Map.class);
 		String username = credentials.get("username");
 		String password = credentials.get("password");
-		
+		System.out.println(username + password);
 		try {
 			User user = userServ.logIn(username, password);
 			ctx.json(user);

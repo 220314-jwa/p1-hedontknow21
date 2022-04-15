@@ -98,12 +98,7 @@ public class UserDAOTest {
 		});
 	}
 	
-	@Test
-	public void updateUserDoesNotExist() {
-		assertThrows(SQLException.class, () -> {
-			userDao.update(new User());
-		});
-	}
+	
 	
 	@Test
 	@Order(2)
@@ -113,11 +108,6 @@ public class UserDAOTest {
 		});
 	}
 	
-	@Test
-	public void deleteUserDoesNotExist() {
-		assertThrows(SQLException.class, () -> {
-			userDao.delete(new User());
-		});
-	}
+	
 
 }

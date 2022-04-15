@@ -20,6 +20,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User logIn(String username, String password) throws IncorrectCredentialsException {
+		System.out.println(username + password);
 		User user = userDao.getByUsername(username);
 		if (user != null && user.getPassWord().equals(password)) {
 			return user;

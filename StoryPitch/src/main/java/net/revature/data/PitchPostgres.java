@@ -180,7 +180,7 @@ public void update(Pitch updatedObj) {
     	preparedStatement.setString(3, updatedObj.getLengthType());
     	preparedStatement.setString(4,  updatedObj.getOneSentenceBlurb());
     	preparedStatement.setString(5, updatedObj.getDescription());        	
-    	preparedStatement.setString(6, updatedObj.getStatus());
+    	preparedStatement.setInt(6, 1);
     	preparedStatement.setString(7, updatedObj.getRole());
     	preparedStatement.setString(8, updatedObj.getGenre());
     	preparedStatement.setInt(9, updatedObj.getId());

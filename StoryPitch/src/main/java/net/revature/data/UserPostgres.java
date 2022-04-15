@@ -208,23 +208,27 @@ public class UserPostgres implements UserDAO {
 	public User getByUsername(String username) {
 		User user = null;
 		try (Connection conn = connFactory.getConnection()) {
-			String sql = "select * from users left join user_pitches on users.id=user_pitches.users_id"
-					+ " where users.user_name = ?";
+			String sql = "select * from users where user_name = ?";
+					  
 			PreparedStatement prepStatement = conn.prepareStatement(sql);
 			prepStatement.setString(1, username);
-
+			System.out.println(username);
+			
 			ResultSet resultSet = prepStatement.executeQuery();
+			
 			if (resultSet.next()) {
 				user = new User();
+				
 				user.setId(resultSet.getInt("id"));
 				user.setFirstName(resultSet.getString("first_name"));
 				user.setLastName(resultSet.getString("last_name"));
 				user.setUserName(username);
 				user.setPassWord(resultSet.getString("pass_word"));
+				
 
 				PitchDAO pitchDAO = DAOFactory.getPitchDAO();
 				user.setPitches(pitchDAO.getByPitch(user));
-				;
+				
 			}
 
 		} catch (SQLException e) {

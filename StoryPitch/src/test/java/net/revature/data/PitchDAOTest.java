@@ -71,8 +71,8 @@ public class PitchDAOTest {
 			}
 			
 			@Test
-			public void getByStatus(String testStatus) {
-				testStatus = "Unsubmitted";
+			public void getByStatus() {
+				String testStatus = "Usubmitted";
 				List<Pitch> pitches = pitchDAO.getByStatus(testStatus);
 				
 				boolean onlyCorrectStatus = true;
