@@ -29,8 +29,7 @@ public class StoryPitchApp {
 				
 				get(PitchesController::getPitches);
 				
-				//path("pitchs", () -> {
-					//get(PitchesController::getPitchs);
+				
 				
 				// /pitches/4 or pitchs/1
 				path("{id}", () -> {
