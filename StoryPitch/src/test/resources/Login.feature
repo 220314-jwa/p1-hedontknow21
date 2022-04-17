@@ -1,3 +1,13 @@
+#First we start off with what the feature is that we are writing a test for
+#then we write out certain scenarios that a user may encounter when logging in
+#the test structure is always (Given, When(And is an extension of When), lastly then which concludes the actions
+#you can have reusability with the WHEN or AND if they are exact before you conclude the action (ex. line - 19,25,32,39)
+#Only after a Scenario Outline can you give examples that cucumber will use as inputs in the test
+
+
+
+
+
 Feature: user login
 
 # you can use this when all of your scenarios have a certain prerequisite
@@ -28,7 +38,7 @@ Given the user is on the homepage
 When the user enters the username "<username>"
 And the user enters the password "<password>"
 And the user clicks the login button
-Then an ivalid input message will be displayed
+Then an invalid input message will be displayed
 
 		Examples:
 		|username | password |
