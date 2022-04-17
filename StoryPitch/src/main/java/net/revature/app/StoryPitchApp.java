@@ -3,6 +3,8 @@ package net.revature.app;
 import net.revature.services.UserService;
 import net.revature.services.UserServiceImpl;
 import io.javalin.Javalin;
+import io.javalin.core.JavalinConfig;
+
 import static io.javalin.apibuilder.ApiBuilder.*; // this allows you to use the routes methods (path, etc.)
 import net.revature.controllers.UsersController;
 import net.revature.controllers.PitchesController;
@@ -10,16 +12,16 @@ import net.revature.controllers.PitchesController;
 
 public class StoryPitchApp {
 	
-	private static UserService userServ = new UserServiceImpl();
+	
 
 	public static void main(String[] args) {
 		// set up endpoints
-		Javalin app = Javalin.create(config -> {
-			config.enableCorsForAllOrigins();
-		});
+		// refactored lambda code with the Javalin Config method thats allows 
+		// our Javalin to configure itself and run
+		Javalin app = Javalin.create(JavalinConfig::enableCorsForAllOrigins);
 		app.start();
 		
-		/* Cleaner code for readabililty*/
+		/* Cleaner code for readability*/
 		
 		app.routes(() -> {
 			// all paths starting with /pitches, pitchs
